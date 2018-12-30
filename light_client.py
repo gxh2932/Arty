@@ -66,11 +66,8 @@ def on_message(msg):
         
     elif content.startswith('!arty-pt'):
         
-        if not msg.mentions:
-            response = '{0.author.mention} :PogTard:'.format(msg)
-        
-        else:
-            response = ' '.join(i.mention for i in msg.mentions) + ' :PogTard:'
+        mentions = msg.mentions if msg.mentions else (msg.author.mention,)
+        response = ' '.join(i.mention for i in mentions) + ' :PogTard:'
         
     else:
         response = '{0.author.mention} :FailFish:'.format(msg)
