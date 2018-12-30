@@ -56,7 +56,10 @@ def on_message(msg):
         seed = bytes(content[5:].strip(), encoding='utf-8')
 
         model.reset_states()
-        response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
+        if content == '!arty':
+            response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
+        else:
+            response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
     elif client.user.mentioned_in(msg):
         seed = bytes("", encoding='utf-8')
