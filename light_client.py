@@ -62,12 +62,8 @@ def on_message(msg):
             response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
 
     elif content.startswith('!arty-pt'):
-        print('hey')
-        mentions = msg.mentions if msg.mentions else (msg.author.mention)
-        if msg.mentions:
-            response = ' '.join(i.mention for i in mentions) + ' :PogTard:'
-        else:
-            response = mentions + ' :PogTard:'
+        mentions = msg.mentions if msg.mentions else (msg.author, )
+        response = ' '.join(i.mention for i in mentions) + ' :PogTard:'
 
     elif client.user.mentioned_in(msg):
         seed = bytes("", encoding='utf-8')
