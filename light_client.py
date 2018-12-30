@@ -59,7 +59,7 @@ def on_message(msg):
         for i in response.split('\n'):
             print('>>>', i)
         
-    elif "@Arty" in content and "!arty" not in content:
+    elif client.user.mentioned_in(msg):
         seed = bytes(" ", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
