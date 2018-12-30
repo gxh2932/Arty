@@ -28,6 +28,9 @@ def generate_with_seed(model, seed, max_len):
         x = np.zeros((1, 1), dtype='uint8')
         x[0][0] = choice
 
+    if output[0] == 0:
+        output = output[1:]
+
     return output
     
 
