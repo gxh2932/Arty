@@ -17,11 +17,25 @@ client = discord.Client()
 loop.run_until_complete(client.login(token))
 
 reverse_emote_regex = re.compile(r':[a-zA-Z]+:')
-emote_regex = re.compile(r'<:[a-zA-Z]+:[0-9]+>') 
+emote_regex = re.compile(r'<:[a-zA-Z]+:[0-9]+>')
+
+emote_dict = {}
+
+def update_emotes():
+    global emote_dict
+    
+    emote_dict = {}
+    
+    for emote in client.get_all_emojis():
+        emote_dict[":"+emote.name+":"] = str(emote)
+        emote_dict[str(emote)] = ":"+emote.name+":"
 
 @client.event
 @asyncio.coroutine
 def on_ready():
+    
+    update_emotes()
+    
     print('Ready')
 
 @client.event
@@ -43,13 +57,9 @@ def on_message(msg):
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
-        # fix this shit, it's O(n²)
-        
         for potential_emote in set(reverse_emote_regex.findall(response)):
-            for available_emote in list(client.get_all_emojis()):
-                if potential_emote[1:-1] == available_emote.name:
-                    response = response.replace(potential_emote, str(available_emote))
-                    break
+            if potential_emote in emote_dict:
+                response = response.replace(potential_emote, emote_dict[potential_emote])
         
         for i in (str(msg.author)+': '+msg.clean_content).split('\n'):
             print('<<<', i)
@@ -61,13 +71,9 @@ def on_message(msg):
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
-        # fix this shit, it's O(n²)
-        
         for potential_emote in set(reverse_emote_regex.findall(response)):
-            for available_emote in list(client.get_all_emojis()):
-                if potential_emote[1:-1] == available_emote.name:
-                    response = response.replace(potential_emote, str(available_emote))
-                    break
+            if potential_emote in emote_dict:
+                response = response.replace(potential_emote, emote_dict[potential_emote])
         
         
         response = '{0.author.mention}'.format(msg) + response
