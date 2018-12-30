@@ -61,11 +61,6 @@ def on_message(msg):
             if potential_emote in emote_dict:
                 response = response.replace(potential_emote, emote_dict[potential_emote])
         
-        for i in (str(msg.author)+': '+msg.clean_content).split('\n'):
-            print('<<<', i)
-        for i in response.split('\n'):
-            print('>>>', i)
-        
     elif client.user.mentioned_in(msg):
         seed = bytes("", encoding='utf-8')
         model.reset_states()
