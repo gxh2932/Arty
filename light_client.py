@@ -8,9 +8,8 @@ model.load_weights('arty.h5')
 
 MAX_GEN_LEN = 300
 
-token = ''
-
-assert len(token) != 0
+with open('token') as file:
+    token = file.read()
 
 loop = asyncio.get_event_loop()
 client = discord.Client()
