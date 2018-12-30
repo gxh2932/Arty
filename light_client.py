@@ -39,10 +39,7 @@ def on_message(msg):
     yield from client.send_typing(msg.channel)
     
     if content == '!arty' or content.startswith('!arty '):
-        if content.rstrip() == '!arty':
-            seed = bytes(" ", encoding='utf-8')
-        else:
-            seed = bytes(content[5:].strip(), encoding='utf-8')
+        seed = bytes(content[5:].strip(), encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
@@ -60,7 +57,7 @@ def on_message(msg):
             print('>>>', i)
         
     elif client.user.mentioned_in(msg):
-        seed = bytes(" ", encoding='utf-8')
+        seed = bytes("", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         

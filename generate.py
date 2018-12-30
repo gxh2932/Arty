@@ -1,6 +1,10 @@
 import numpy as np
 
 def generate_with_seed(model, seed, max_len):
+    
+    if len(seed) == 0:
+        seed = b'\x00'
+    
     x = np.zeros((1, len(seed)), dtype='uint8')
     for num, i in enumerate(seed): x[0][num] = i
     output = seed
