@@ -53,7 +53,11 @@ def on_message(msg):
     yield from client.send_typing(msg.channel)
     
     if content == '!arty' or content.startswith('!arty '):
-        seed = bytes(content[5:].strip(), encoding='utf-8')
+        if content == '!arty':
+            seed = bytes(" ", encoding='utf-8')
+        else:
+            seed = bytes(content[5:].strip(), encoding='utf-8')
+
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
