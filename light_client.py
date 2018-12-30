@@ -56,10 +56,7 @@ def on_message(msg):
         seed = bytes(content[5:].strip(), encoding='utf-8')
 
         model.reset_states()
-        if content == '!arty':
-            response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
-        else:
-            response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
+        response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
 
     elif content.startswith('!arty-pt'):
         mentions = msg.mentions if msg.mentions else (msg.author, )
