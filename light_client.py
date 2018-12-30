@@ -57,37 +57,27 @@ def on_message(msg):
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
-        for potential_emote in set(reverse_emote_regex.findall(response)):
-            if potential_emote in emote_dict:
-                response = response.replace(potential_emote, emote_dict[potential_emote])
-        
     elif client.user.mentioned_in(msg):
         seed = bytes("", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
-        for potential_emote in set(reverse_emote_regex.findall(response)):
-            if potential_emote in emote_dict:
-                response = response.replace(potential_emote, emote_dict[potential_emote])
-        
-        
-        response = '{0.author.mention}'.format(msg) + response
+        response = '{0.author.mention} {1}'.format(msg, response)
         
     elif content.startswith('!arty-pt'):
         
-        if content.rstrip() == '!arty-pt':
-            response = '{0.author.mention}'.format(msg) + " " + "<:PogTard:518227662892957707>"
+        if not msg.mentions:
+            response = '{0.author.mention} :PogTard:'.format(msg)
         
         else:
-            response = ""
-            
-            for user in msg.mentions:
-                response = response + user.mention + " "
-            
-            response = response + "<:PogTard:518227662892957707>"
+            response = ' '.join(i.mention for i in msg.mentions) + ' :PogTard:'
         
     else:
-        response = '{0.author.mention}'.format(msg) + " " + "<:FailFish:462463087396782081>"
+        response = '{0.author.mention} :FailFish:'.format(msg)
+        
+    for potential_emote in set(reverse_emote_regex.findall(response)):
+        if potential_emote in emote_dict:
+            response = response.replace(potential_emote, emote_dict[potential_emote])
         
     for i in (str(msg.author)+': '+msg.clean_content).split('\n'):
         print('<<<', i)
@@ -96,8 +86,7 @@ def on_message(msg):
     
     yield from client.send_message(msg.channel, response)
 
-            
-        
+
 while True:
 
     try:
