@@ -8,7 +8,7 @@ model.load_weights('arty.h5')
 
 MAX_GEN_LEN = 300
 
-with open('token') as file:
+with open('token.txt') as file:
     token = file.read()
 
 loop = asyncio.get_event_loop()
@@ -44,7 +44,7 @@ def on_message(msg):
     
     content = msg.clean_content
     
-    if msg.author == client.user or not (client.user.mentioned_in(msg) or content.starswith('!arty')):
+    if msg.author == client.user or not (client.user.mentioned_in(msg) or content.startswith('!arty')):
         return
     
     for i, j in zip(emote_regex.findall(content), [i[1:i[2:].index(':')+3] for i in emote_regex.findall(content)]):
@@ -58,10 +58,10 @@ def on_message(msg):
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
         
     elif client.user.mentioned_in(msg):
-        seed = bytes("", encoding='utf-8')
+        seed = bytes(" ", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
-        
+        response = response[1:]
         response = '{0.author.mention} {1}'.format(msg, response)
         
     elif content.startswith('!arty-pt'):
