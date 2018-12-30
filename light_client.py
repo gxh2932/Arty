@@ -44,11 +44,11 @@ def on_message(msg):
     
     content = msg.clean_content
     
-    for i, j in zip(emote_regex.findall(content), [i[1:i[2:].index(':')+3] for i in emote_regex.findall(content)]):
-        content = content.replace(i, j)
-    
     if msg.author == client.user or not (client.user.mentioned_in(msg) or content.starswith('!arty')):
         return
+    
+    for i, j in zip(emote_regex.findall(content), [i[1:i[2:].index(':')+3] for i in emote_regex.findall(content)]):
+        content = content.replace(i, j)
         
     yield from client.send_typing(msg.channel)
     
