@@ -59,7 +59,7 @@ def on_message(msg):
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
         
     elif client.user.mentioned_in(msg):
-        seed = bytes(content[5:].strip(), encoding='utf-8')
+        seed = bytes("", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
     
