@@ -63,12 +63,12 @@ def on_message(msg):
         response = ' '.join(i.mention for i in mentions) + ' :PogTard:'
 
     elif client.user.mentioned_in(msg):
-        seed = bytes("@"+msg.author.display_name, encoding='utf-8')
+        seed = bytes("@"+msg.author.display_name+" ", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
     
-        response = '{0.author.mention} {1}'.format(msg, response[1+len(msg.author.display_name):])
-        
+        response = '{0.author.mention} {1}'.format(msg, response[2+len(msg.author.display_name):])
+         i'm not kiddin
     else:
         response = '{0.author.mention} :FailFish:'.format(msg)
         
