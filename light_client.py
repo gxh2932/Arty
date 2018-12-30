@@ -36,9 +36,9 @@ def on_message(msg):
     if msg.author == client.user or not (client.user.mentioned_in(msg) or content.starswith('!arty')):
         return
         
-    elif content == '!arty' or content.startswith('!arty '):
-        y=1
-        yield from client.send_typing(msg.channel)
+    yield from client.send_typing(msg.channel)
+    
+    if content == '!arty' or content.startswith('!arty '):
         if content.rstrip() == '!arty':
             seed = bytes(" ", encoding='utf-8')
         else:
@@ -59,11 +59,7 @@ def on_message(msg):
         for i in response.split('\n'):
             print('>>>', i)
         
-
-        yield from client.send_message(msg.channel, response)
-        
     elif "@Arty" in content and "!arty" not in content:
-        yield from client.send_typing(msg.channel)
         seed = bytes(" ", encoding='utf-8')
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace')
@@ -76,18 +72,10 @@ def on_message(msg):
                     response = response.replace(potential_emote, str(available_emote))
                     break
         
-        for i in (str(msg.author)+': '+msg.clean_content).split('\n'):
-            print('<<<', i)
-        for i in response.split('\n'):
-            print('>>>', i)
-        
         
         response = '{0.author.mention}'.format(msg) + response
-
-        yield from client.send_message(msg.channel, response)
         
     elif content.startswith('!arty-pt'):
-        yield from client.send_typing(msg.channel)
         
         if content.rstrip() == '!arty-pt':
             response = '{0.author.mention}'.format(msg) + " " + "<:PogTard:518227662892957707>"
@@ -100,12 +88,15 @@ def on_message(msg):
             
             response = response + "<:PogTard:518227662892957707>"
         
-        yield from client.send_message(msg.channel, response)
-        
     else:
-        yield from client.send_typing(msg.channel)
         response = '{0.author.mention}'.format(msg) + " " + "<:FailFish:462463087396782081>"
-        yield from client.send_message(msg.channel, response)
+        
+    for i in (str(msg.author)+': '+msg.clean_content).split('\n'):
+        print('<<<', i)
+    for i in response.split('\n'):
+        print('>>>', i)
+    
+    yield from client.send_message(msg.channel, response)
 
             
         
