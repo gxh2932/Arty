@@ -17,7 +17,8 @@ client = discord.Client()
 loop.run_until_complete(client.login(token))
 
 reverse_emote_regex = re.compile(r':[a-zA-Z]+:')
- 
+emote_regex = re.compile(r'<:[a-zA-Z]+:[0-9]+>') 
+
 @client.event
 @asyncio.coroutine
 def on_ready():
@@ -29,7 +30,6 @@ def on_message(msg):
     
     content = msg.clean_content
     
-    emote_regex = re.compile(r'<:[a-zA-Z]+:[0-9]+>')
     for i, j in zip(emote_regex.findall(content), [i[1:i[2:].index(':')+3] for i in emote_regex.findall(content)]):
         content = content.replace(i, j)
     
