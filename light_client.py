@@ -63,7 +63,7 @@ def on_message(msg):
         model.reset_states()
         response = str(generate_with_seed(model, seed, MAX_GEN_LEN), encoding='utf-8', errors='backslashreplace').split(':',1)[1]
     
-        response = '{0.author.mention} {1}'.format(msg, response)
+        response = '{0.author.mention} {1}'.format(msg, response[1:])
         
     elif content.startswith('!arty-pt'):
         
