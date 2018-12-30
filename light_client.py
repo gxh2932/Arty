@@ -32,11 +32,9 @@ def on_message(msg):
     emote_regex = re.compile(r'<:[a-zA-Z]+:[0-9]+>')
     for i, j in zip(emote_regex.findall(content), [i[1:i[2:].index(':')+3] for i in emote_regex.findall(content)]):
         content = content.replace(i, j)
-        
-    y=0
     
-    if msg.author == client.user:
-        return    
+    if msg.author == client.user or not (client.user.mentioned_in(msg) or content.starswith('!arty')):
+        return
         
     elif content == '!arty' or content.startswith('!arty '):
         y=1
@@ -65,7 +63,6 @@ def on_message(msg):
         yield from client.send_message(msg.channel, response)
         
     elif "@Arty" in content and "!arty" not in content:
-        y=1
         yield from client.send_typing(msg.channel)
         seed = bytes(" ", encoding='utf-8')
         model.reset_states()
@@ -90,7 +87,6 @@ def on_message(msg):
         yield from client.send_message(msg.channel, response)
         
     elif content.startswith('!arty-pt'):
-        y=1
         yield from client.send_typing(msg.channel)
         
         if content.rstrip() == '!arty-pt':
@@ -106,24 +102,7 @@ def on_message(msg):
         
         yield from client.send_message(msg.channel, response)
         
-    elif content.startswith('!arty-pt'):
-        y=1
-        yield from client.send_typing(msg.channel)
-        
-        if content.rstrip() == '!arty-pt':
-            response = '{0.author.mention}'.format(msg) + " " + "<:PogTard:518227662892957707>"
-        
-        else:
-            response = ""
-            
-            for user in msg.mentions:
-                response = response + user.mention + " "
-            
-            response = response + "<:PogTard:518227662892957707>"
-        
-        yield from client.send_message(msg.channel, response)
-        
-    elif '!arty' in content and y==0:
+    else:
         yield from client.send_typing(msg.channel)
         response = '{0.author.mention}'.format(msg) + " " + "<:FailFish:462463087396782081>"
         yield from client.send_message(msg.channel, response)
